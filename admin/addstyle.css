@@ -1,0 +1,103 @@
+body{
+	margin: 0;
+	padding: 0;
+
+	margin: 0 auto;
+}
+
+.navbar1{
+	width: 100%;
+	background: #000033;
+	height: 80px;
+	position: absolute;
+	margin-right: 20px;
+}
+ul {
+	list-style: none;
+	float: right;
+	padding-left: 0px;
+	margin: 0px;
+}
+ul li{
+	float: left;
+	margin-top: 20px;
+
+}
+ul li a{
+	width: 130px;
+	color: white;
+	display: block;
+	text-decoration: none;
+	font-size: 20px;
+	text-align: center;
+	padding: 10px;
+	font-family: Century Gothic;
+	font-weight: bold;
+}
+ul li a:hover{
+	background: white;
+	color: black;
+	text-decoration: none;
+}
+ul li ul{
+	background: #000033;
+}
+ul li ul li {
+	float: none;
+}
+
+ul li ul {
+	display: none;
+}
+ul li:hover ul{
+	display: block;
+}
+.container{
+	padding-top: 100px;
+	margin: 0 auto;
+	width: 70%;
+
+}
+
+.sub-form{
+	max-width: 600px;
+	margin: 2rem auto;
+	border: 2px solid #000033;
+	border-radius: 5px;
+	padding-top: 30px;
+    padding-left: 50px;
+    padding-right: 70px;
+    padding-bottom: 40px;
+
+	font-family: Century Gothic;
+	font-size: 25px;
+}
+label{
+	display:block;
+	padding: 1rem 0;
+}
+input{
+	display: block;
+	width: 100%;
+	border: 1px solid gray; 
+	padding: .7rem;
+	font-size: 18px;
+}
+#add-crs{
+	border: 0;
+	background: #000033;
+	padding: 1rem;
+	color: white;
+	width: 190px;
+	font-size: 20px;
+	font-weight: bold;
+	margin-top: 2rem;
+}
+#add-crs:hover {
+	background: white;
+	color: black;
+	text-decoration: none;
+	transition: .5s;
+	cursor: pointer;
+	font-weight:bold;
+}
