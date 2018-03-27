@@ -1,0 +1,14 @@
+x-star-rating{
+	font-family:'Ionicons';
+	font-size:48px;
+	display:inline-flex;
+	cursor:pointer;
+}
+x-star-rating > .star::after{
+	content:'\f4b2';
+	color:#777;
+}
+x-star-rating > .star.full::after{
+	content:'\f4b3';
+	color:#fd0;
+}

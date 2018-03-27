@@ -1,4 +1,16 @@
 
+<?php
+require_once 'config/config.php';
+// Initialize the session
+session_start();
+
+// If session variable is not set it will redirect to login page
+if(!isset($_SESSION["username"]) || empty($_SESSION["username"])){
+  header("location: index2.php");
+  exit;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -9,6 +21,10 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
+	<link rel="stylesheet" type="text/css" href="StarRating.css">
+  <link rel="stylesheet" type="text/css" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+
+
 
     <title>Course</title>
 
@@ -40,15 +56,43 @@
     <!-- Fixed navbar -->
     <div class="navbar1">
       <ul>
-        <li><a href="#">Profile</a></li>
-        <li><a href="#">My courses</a>
+		<li><a href="#" style="float: left;">Hi, <?php echo $_SESSION['username'];?></a>
+</li>
+		 <li><a href="viewprofile.php">View Profile</a></li>
+        
+        <li><a href="userprofile.php">Edit Profile</a></li>
+        <li><a href="#">My Courses</a>
           <ul>
-            <li><a href="#">courses 1</a></li>
-            <li><a href="#">courses 2</a></li>
-            <li><a href="#">courses 3</a></li>
+		  <?php
+			$sql="    SELECT course.coursename,course.code
+      FROM course JOIN user_course
+        ON course.code = user_course.code
+     WHERE user_course.username=:username and user_course.status='In Progress'";
+			$stmt=$pdo->prepare($sql);
+			$stmt->bindParam(':username',$param_user,PDO::PARAM_STR);
+			$param_user=$_SESSION["username"];
+			$stmt->execute();
+			$i=$stmt->rowCount();
+			$ans="No Courses Taken..";
+			if($i==0)
+			{
+			?>	<li><a href="#"><?php echo $ans;?></a></li><?php
+			}
+			else
+			{
+			while($i>0)
+			{
+				$row = $stmt->fetch();
+		  ?>
+            <li><a href="mainpage.php?id=<?php echo $row["code"];?>"><?php echo $row["coursename"];?></a></li>
+			<?php
+			$i--;
+			}
+			}
+			?>
           </ul>
         </li>
-        <li><a href="#">Log out</a></li>
+        <li><a href="logout.php">Log out</a></li>
       </ul>
     </div>
 
@@ -57,62 +101,44 @@
       <div class="search_bar">
         <h1>Search Course</h1>
         <form>
-          <input type="text" name="" required="" placeholder="Search...">
+          <input type="text" name="" id="keyword" required="" placeholder="Search...">
         </form>
+	<div id="content">
+		
+		</div>
+		</div>
       </div>
-    <div class="row">
-      <div class="col-md-8">
-        <h2>Name of the project</h2>
-        <h3>Description about the course.</h3>
-      </div>
-      <div class="col-md-4">
-        <a href="#"><img src="right-arrow.png" alt="take-course"></a>
-      </div>
-    </div>
 
-    <div class="row">
-      <div class="col-md-8">
-        <h2>Name of the project</h2>
-        <h3>Description about the course.</h3>
-      </div>
-      <div class="col-md-4">
-        <a href="#"><img src="right-arrow.png" alt="take-course"></a>
-      </div>
-    </div>
 
-    <div class="row">
-      <div class="col-md-8">
-        <h2>Name of the project</h2>
-        <h3>Description about the course.</h3>
-      </div>
-      <div class="col-md-4">
-        <a href="#"><img src="right-arrow.png" alt="take-course"></a>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-md-8">
-        <h2>Name of the project</h2>
-        <h3>Description about the course.</h3>
-      </div>
-      <div class="col-md-4">
-        <a href="#"><img src="right-arrow.png" alt="take-course"></a>
-      </div>
-    </div>
     
-
-    </div> <!-- /container -->
     
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+   
     <script src="js/bootstrap.min.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+	
     <script src="js/ie10-viewport-bug-workaround.js"></script>
 
-    
+     <script type="text/javascript">
+ $(document).ready(function() {
+ $('#keyword').on('input', function() {
+ var searchKeyword = $(this).val();
+ if (searchKeyword.length >= 3) {
+ $.post('search2.php', { keywords: searchKeyword }, function(data) {
+ $('div#content').empty()
+ $.each(data, function() {
+	 $('div#content').append('<div class="row"><div class="col-md-8"><h2>'+ this.title + '</h2> <h3>'+this.desc+'</h3></div><div class="col-md-4"><a href="mainpage.php?id=' + this.id + '"><img src="right-arrow.png" alt="take-course"></a><br><x-star-rating style="float:left" value="'+this.rate+'" number="5" id="rating"></x-star-rating></div></div>');
+ });
+ }, "json");
+ }
+ });
+ });
+ </script>
+  <script type="text/javascript" src="StarRating1.js"></script>
+  
   </body>
 </html>
